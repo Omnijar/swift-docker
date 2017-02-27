@@ -17,17 +17,20 @@ ENV WORK_DIR /root
 WORKDIR ${WORK_DIR}
 
 # Linux OS utils & Swift libraries
-RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \
-  libicu-dev \
-  libcurl4-openssl-dev \
-  wget \
+RUN apt-get update \
+  && apt-get dist-upgrade -y \
+  && apt-get install -y \
+    libicu-dev \
+    libcurl4-openssl-dev \
+    wget \
   && apt-get clean \
   && wget -q https://swift.org/builds/$SWIFT_SNAPSHOT_LOWERCASE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz \
   && tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz $SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/lib/swift/linux \
   && rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz \
   && find $SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/lib/swift/linux -type f ! -name '*.so' -delete \
   && rm -rf $SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/lib/swift/linux/*/ \
-  && apt-get remove -y gcc cpp sgml-base icu-devtools libc6-dev binutils manpages-dev manpages wget pkg-config perl \
+  && cp -r ~/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/lib/swift /usr/lib/swift \
+  && apt-get remove -y gcc cpp sgml-base icu-devtools gcc-4.8 cpp-4.8 libc6-dev binutils manpages-dev manpages wget pkg-config perl \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && apt-get autoremove -y
 

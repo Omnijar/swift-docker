@@ -21,6 +21,8 @@ RUN apt-get update \
   && apt-get dist-upgrade -y \
   && apt-get install -y \
     libicu-dev \
+    libxml2 \
+    libbsd-dev \
     libcurl4-openssl-dev \
     wget \
   && apt-get clean \
@@ -30,6 +32,7 @@ RUN apt-get update \
   && find $SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/lib/swift/linux -type f ! -name '*.so' -delete \
   && rm -rf $SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/lib/swift/linux/*/ \
   && cp -r ~/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/lib/swift /usr/lib/swift \
+  && ln -s /usr/lib/swift/linux/*.so /usr/lib/ \
   && apt-get remove -y gcc cpp sgml-base icu-devtools gcc-4.8 cpp-4.8 libc6-dev binutils manpages-dev manpages wget pkg-config perl \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
   && apt-get autoremove -y
